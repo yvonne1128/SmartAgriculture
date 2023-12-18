@@ -29,7 +29,6 @@ export interface CroprecommendationsArray {
   best_selling: Croprecommendations[];
 }
 
-// 如果响应是一个数组
 async function getSoilData() {
   const res = await fetch('http://120.110.115.130:5000/soil');
   const data: SoilDataModel = await res.json();
@@ -45,7 +44,6 @@ async function getFertilizeData() {
 async function getCroprecommendationsData() {
   const res = await fetch('http://120.110.115.130:5000/Croprecommendations');
   const data: CroprecommendationsArray = await res.json()
-  console.log("Croprecommendationss", data)
 
   return data
 }
