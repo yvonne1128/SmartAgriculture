@@ -2,9 +2,26 @@
 
 import { SoilDataModel } from "@/app/page";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from "chart.js";
+import {
+    Chart as ChartJS,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 /**
  * 土壤分析
@@ -28,7 +45,7 @@ export default function SoilComponent({ soilData }: { soilData: SoilDataModel })
             x: {
                 title: {
                     display: true,
-                    text: '成分', // X 軸的標籤
+                    text: '元素名稱', // X 軸的標籤
                 },
             },
             y: {

@@ -1,3 +1,4 @@
+import CroprecommendationsComponent from "@/components/croprecommendations";
 import FertilizeComponent from "@/components/fertilize";
 import CustomNavbar from "@/components/navbar"
 import SoilComponent from "@/components/soil";
@@ -19,39 +20,51 @@ export interface FertilizeAmountArray {
   fertilizer_amount: FertilizeAmount[];
 }
 
+interface Croprecommendations {
+  no: string,
+  TotalAmount: number
+}
+
+export interface CroprecommendationsArray {
+  best_selling: Croprecommendations[];
+}
+
 // 如果响应是一个数组
 async function getSoilData() {
   const res = await fetch('http://120.110.115.130:5000/soil');
   const data: SoilDataModel = await res.json();
-  console.log("SOILLLL", data)
   return data
 }
 
 async function getFertilizeData() {
   const res = await fetch('http://120.110.115.130:5000/fertilize');
   const data: FertilizeAmountArray = await res.json();
-  
   return data
 }
 
-// async function getCroprecommendationsData() {
-//   const res = await fetch('http://120.110.115.130:5000/fertilize');
-//   const data: CroprecommendationsArray = await res.json()
-//   console.log("Croprecommendations", data)
+async function getCroprecommendationsData() {
+  const res = await fetch('http://120.110.115.130:5000/Croprecommendations');
+  const data: CroprecommendationsArray = await res.json()
+  console.log("Croprecommendationss", data)
 
-//   return data
-// }
+  return data
+}
 
 export default async function Home() {
   const soilData = await getSoilData();
   const fertilizeData = await getFertilizeData();
+  const croprecommendationsData = await getCroprecommendationsData();
 
   return (
     <>
       <CustomNavbar />
       
       <main className="flex min-h-screen flex-col items-center justify-between px-16 py-24">
-        <div className="w-full flex flex-row">
+        <div className="w-full">
+          <CroprecommendationsComponent croprecommendationsData={croprecommendationsData} />
+        </div>
+
+        <div className="w-full flex flex-row py-16">
           <SoilComponent soilData={soilData} />
           <FertilizeComponent fertilizeData={fertilizeData} />
         </div>
