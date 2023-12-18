@@ -3,13 +3,14 @@
 import { FertilizeAmountArray } from "@/app/page";
 import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ChartOptions
 } from 'chart.js';
 
 ChartJS.register(
@@ -41,7 +42,7 @@ export default function FertilizeComponent({ fertilizeData }: { fertilizeData: F
         ],
     };
 
-    const options = {
+    const options: ChartOptions<"bar"> = {
         scales: {
             x: {
                 title: {
@@ -61,13 +62,13 @@ export default function FertilizeComponent({ fertilizeData }: { fertilizeData: F
         },
         responsive: true,
     };
-    
+
     return (
         <div className="w-full flex flex-col px-4">
             <h2 className="text-xl font-semibold">施肥建議</h2>
 
             <br />
-            
+
             <p className="leading-loose">建議用量請依照個元素實際用力</p>
             <p className="leading-loose">來做低、中、高的比例調整</p>
 
