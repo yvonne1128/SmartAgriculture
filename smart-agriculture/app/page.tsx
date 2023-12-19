@@ -42,7 +42,7 @@ async function getFertilizeData() {
 }
 
 async function getCroprecommendationsData() {
-  const res = await fetch('http://120.110.115.130:5000/Croprecommendations');
+  const res = await fetch('http://120.110.115.130:5000/croprecommendations');
   const data: CroprecommendationsArray = await res.json()
 
   return data
