@@ -24,6 +24,8 @@ ChartJS.register(
     Legend
 );
 
+export const dynamic = 'force-dynamic';
+
 /**
  * 施肥建議
  */

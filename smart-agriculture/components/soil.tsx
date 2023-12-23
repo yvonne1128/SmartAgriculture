@@ -26,6 +26,8 @@ ChartJS.register(
     Legend
 );
 
+export const dynamic = 'force-dynamic';
+
 /**
  * 土壤分析
  */

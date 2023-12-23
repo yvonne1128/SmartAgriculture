@@ -5,6 +5,8 @@ import fetchRainfallData from "@/app/services/fetchRainfallData";
 import { Card, CardBody, CardHeader, CircularProgress, Skeleton } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
+export const dynamic = 'force-dynamic';
+
 /**
  * 土壤分析
  */
