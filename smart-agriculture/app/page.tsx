@@ -6,6 +6,7 @@ import CustomNavbar from "@/components/navbar"
 import RainfallComponent from "@/components/rainfall";
 import SoilComponent from "@/components/soil";
 import { useEffect, useRef, useState } from "react";
+import fetchRainfallData from "./services/fetchRainfallData";
 
 export interface SoilDataModel {
   organic_matter: { value: number; threshold: number; status: string };
@@ -44,47 +45,25 @@ export interface RainfallDataModel {
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [activeSection, setActiveSection] = useState('');
-
-  const sectionRefs = {
-    'croprecommendations': useRef(null),
-    'soil': useRef(null),
-    'fertilize': useRef(null),
-    'temperature': useRef(null),
-    'rainfall': useRef(null),
-  };
+  const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
+    fetchRainfallData()
+      .then(data => {
+        setRainfall(data);
+      })
+      .catch(error => {
+        console.error('Error fetching rainfall data:', error);
       });
-    }, { threshold: 0.5 }); // 配置 observer 的選項，例如何時視為可見
-
-    Object.values(sectionRefs).forEach(ref => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => {
-      Object.values(sectionRefs).forEach(ref => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
-      });
-    };
   }, []);
   
   return (
     <>
-      <CustomNavbar activeSection={activeSection}/>
+      <CustomNavbar/>
       
       <main className="flex min-h-screen flex-col items-center justify-between px-16 py-6">
         <div id="rainfall" className="w-full flex flex-row py-16">
-          <RainfallComponent />
+          {rainfall && <RainfallComponent rainfallData={rainfall} />}
         </div>
 
         <div id="croprecommendations" className="w-full">

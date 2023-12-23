@@ -10,18 +10,18 @@ export const dynamic = 'force-dynamic';
 /**
  * 土壤分析
  */
-export default function RainfallComponent() {
-    const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
+export default function RainfallComponent({ rainfallData }: { rainfallData: RainfallDataModel }) {
+    // const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
 
-    useEffect(() => {
-        fetchRainfallData()
-            .then(data => {
-                setRainfall(data);
-            })
-            .catch(error => {
-                console.error('Error fetching rainfall data:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetchRainfallData()
+    //         .then(data => {
+    //             setRainfall(data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching rainfall data:', error);
+    //         });
+    // }, []);
 
     function getTomorrowDate() {
         // 獲取當前日期
@@ -47,8 +47,8 @@ export default function RainfallComponent() {
             <CardBody>
                 <ul>
                     <li className="leading-loose">預測時間：{getTomorrowDate()}</li>
-                    <li className="leading-loose">預測雨量：{rainfall
-                        ? rainfall.rain.predicted_tomorrow_rainfall + ' mm' // 假設您的數據中有一個名為 predictedRainfall 的字段
+                    <li className="leading-loose">預測雨量：{rainfallData
+                        ? rainfallData.rain.predicted_tomorrow_rainfall + ' mm' // 假設您的數據中有一個名為 predictedRainfall 的字段
                         : <CircularProgress aria-label="Loading..." />
                     }</li>
                 </ul>

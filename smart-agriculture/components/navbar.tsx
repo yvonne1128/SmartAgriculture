@@ -1,9 +1,9 @@
 'use client';
 
 import React from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 
-export default function CustomNavbar({ activeSection }: { activeSection: string }) {
+export default function CustomNavbar() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const menuItems = [
@@ -27,27 +27,27 @@ export default function CustomNavbar({ activeSection }: { activeSection: string 
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem isActive={activeSection === 'temperature'}>
+                <NavbarItem>
                     <Link color="foreground" href="#temperature">
                         溫度預測
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={activeSection === 'rainfall'}>
+                <NavbarItem>
                     <Link color="foreground" href="#rainfall">
                         降雨量預測
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={activeSection === 'croprecommendations'}>
+                <NavbarItem>
                     <Link color="foreground" href="#croprecommendations" aria-current="page">
                         作物推薦
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={activeSection === 'soil'}>
+                <NavbarItem>
                     <Link color="foreground" href="#soil" >
                         土壤分析
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive={activeSection === 'fertilize'}>
+                <NavbarItem>
                     <Link color="foreground" href="#fertilize">
                         施肥建議
                     </Link>
