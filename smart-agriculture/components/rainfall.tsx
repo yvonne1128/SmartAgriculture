@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
  * 土壤分析
  */
 export default function RainfallComponent() {
-    const [rainfall, setRainfall] = useState<RainfallDataModel>();
+    const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
 
     useEffect(() => {
         fetchRainfallData()
