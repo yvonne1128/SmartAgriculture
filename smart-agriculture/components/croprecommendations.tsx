@@ -1,6 +1,6 @@
 'use client';
 
-import { CroprecommendationsArray, FertilizeAmountArray } from "@/app/page";
+import { CroprecommendationsArrayDataModel } from "@/app/page";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -11,6 +11,9 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import { useEffect, useState } from "react";
+import fetchCroprecommendationsData from "@/app/services/fetchCroprecommendationsData";
+import { Skeleton } from "@nextui-org/react";
 
 ChartJS.register(
     CategoryScale,
@@ -24,9 +27,21 @@ ChartJS.register(
 /**
  * 施肥建議
  */
-export default function CroprecommendationsComponent({ croprecommendationsData }: { croprecommendationsData: CroprecommendationsArray }) {
-    const labels = croprecommendationsData.best_selling.map(item => item.no);
-    const values = croprecommendationsData.best_selling.map(item => item.TotalAmount);
+export default function CroprecommendationsComponent() {
+    const [croprecommendations, setCroprecommendations] = useState<CroprecommendationsArrayDataModel>();
+
+    useEffect(() => {
+        fetchCroprecommendationsData()
+            .then(data => {
+                setCroprecommendations(data);
+            })
+            .catch(error => {
+                console.error('Error fetching croprecommendations data:', error);
+            });
+    }, []);
+
+    const labels = croprecommendations ? croprecommendations.best_selling.map(item => item.no) : [];
+    const values = croprecommendations ? croprecommendations.best_selling.map(item => item.TotalAmount) : [];
 
     const labelNames = [
         { no: 1, name: "草莓" },
@@ -62,7 +77,7 @@ export default function CroprecommendationsComponent({ croprecommendationsData }
         }),
         datasets: [
             {
-                label: '用量',
+                label: '總銷售額（元）',
                 data: values,
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
                 borderColor: 'rgba(53, 162, 235, 0.8)',
@@ -91,7 +106,7 @@ export default function CroprecommendationsComponent({ croprecommendationsData }
 
     return (
         <div className="w-full flex flex-col px-4">
-            <h2 className="text-xl font-semibold">作物推薦</h2>
+            <h1 className="text-3xl font-semibold">作物推薦</h1>
 
             <br />
 
@@ -100,7 +115,9 @@ export default function CroprecommendationsComponent({ croprecommendationsData }
                 <li className="leading-loose">2. 資料地點：台北地區</li>
             </ul>
 
-            <Bar data={chartData} options={options} />
+            <Skeleton isLoaded={croprecommendations != undefined}>
+                <Bar data={chartData} options={options} />
+            </Skeleton>
         </div>
     )
 }

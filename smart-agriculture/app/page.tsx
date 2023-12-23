@@ -1,7 +1,11 @@
+'use client';
+
 import CroprecommendationsComponent from "@/components/croprecommendations";
 import FertilizeComponent from "@/components/fertilize";
 import CustomNavbar from "@/components/navbar"
+import RainfallComponent from "@/components/rainfall";
 import SoilComponent from "@/components/soil";
+import { useEffect, useRef, useState } from "react";
 
 export interface SoilDataModel {
   organic_matter: { value: number; threshold: number; status: string };
@@ -16,8 +20,8 @@ interface FertilizeAmount {
   fertilizer_amount: string;
 }
 
-export interface FertilizeAmountArray {
-  fertilizer_amount: FertilizeAmount[];
+export interface FertilizeAmountArrayDataModel {
+  fertilizer_amounts: FertilizeAmount[];
 }
 
 interface Croprecommendations {
@@ -25,46 +29,74 @@ interface Croprecommendations {
   TotalAmount: number
 }
 
-export interface CroprecommendationsArray {
+export interface CroprecommendationsArrayDataModel {
   best_selling: Croprecommendations[];
 }
 
-async function getSoilData() {
-  const res = await fetch('http://120.110.115.130:5000/soil');
-  const data: SoilDataModel = await res.json();
-  return data
+interface TomorrowRainfall {
+  predicted_tomorrow_rainfall: number
 }
 
-async function getFertilizeData() {
-  const res = await fetch('http://120.110.115.130:5000/fertilize');
-  const data: FertilizeAmountArray = await res.json();
-  return data
-}
-
-async function getCroprecommendationsData() {
-  const res = await fetch('http://120.110.115.130:5000/croprecommendations');
-  const data: CroprecommendationsArray = await res.json()
-
-  return data
+export interface RainfallDataModel {
+  rain: TomorrowRainfall
 }
 
 export default async function Home() {
-  const soilData = await getSoilData();
-  const fertilizeData = await getFertilizeData();
-  const croprecommendationsData = await getCroprecommendationsData();
+  const [activeSection, setActiveSection] = useState('');
 
+  const sectionRefs = {
+    'croprecommendations': useRef(null),
+    'soil': useRef(null),
+    'fertilize': useRef(null),
+    'temperature': useRef(null),
+    'rainfall': useRef(null),
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { threshold: 0.5 }); // 配置 observer 的選項，例如何時視為可見
+
+    Object.values(sectionRefs).forEach(ref => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      Object.values(sectionRefs).forEach(ref => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, []);
+  
   return (
     <>
-      <CustomNavbar />
+      <CustomNavbar activeSection={activeSection}/>
       
-      <main className="flex min-h-screen flex-col items-center justify-between px-16 py-24">
-        <div className="w-full">
-          <CroprecommendationsComponent croprecommendationsData={croprecommendationsData} />
+      <main className="flex min-h-screen flex-col items-center justify-between px-16 py-6">
+        <div id="rainfall" className="w-full flex flex-row py-16">
+          <RainfallComponent />
+        </div>
+
+        <div id="croprecommendations" className="w-full">
+          <CroprecommendationsComponent />
         </div>
 
         <div className="w-full flex flex-row py-16">
-          <SoilComponent soilData={soilData} />
-          <FertilizeComponent fertilizeData={fertilizeData} />
+          <div id="soil" className="w-full flex flex-col px-4">
+            <SoilComponent />
+          </div>
+          
+          <div id="fertilize" className="w-full flex flex-col px-4">
+            <FertilizeComponent />
+          </div>
         </div>
       </main>
     </>

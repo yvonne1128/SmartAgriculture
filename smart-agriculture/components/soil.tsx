@@ -12,6 +12,9 @@ import {
     LineElement,
     Title
 } from "chart.js";
+import { useEffect, useState } from "react";
+import fetchSoilData from "@/app/services/fetchSoilData";
+import { Skeleton } from "@nextui-org/react";
 
 ChartJS.register(
     CategoryScale,
@@ -26,19 +29,31 @@ ChartJS.register(
 /**
  * 土壤分析
  */
-export default function SoilComponent({ soilData }: { soilData: SoilDataModel }) {
-    const chartData = {
-        labels: Object.keys(soilData),
+export default function SoilComponent() {
+    const [soil, setSoil] = useState<SoilDataModel>();
+
+    useEffect(() => {
+        fetchSoilData()
+            .then(data => {
+                setSoil(data);
+            })
+            .catch(error => {
+                console.error('Error fetching soil data:', error);
+            });
+    }, []);
+
+    const chartData = soil ? {
+        labels: Object.keys(soil),
         datasets: [
             {
                 label: 'mg/L',
-                data: Object.values(soilData).map(item => item.value),
+                data: Object.values(soil).map(item => item.value),
                 fill: false,
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
                 borderColor: 'rgba(53, 162, 235, 0.8)',
             },
         ],
-    };
+    } : null;
 
     const options = {
         scales: {
@@ -61,13 +76,15 @@ export default function SoilComponent({ soilData }: { soilData: SoilDataModel })
     
     return (
         <div className="w-full flex flex-col px-4">
-            <h2 className="text-xl font-semibold">土壤分析</h2>
+            <h2 className="text-3xl font-semibold">土壤分析</h2>
             <br />
             <ul>
                 <li className="leading-loose">1. 當監測數值大於需要的量及無須補充</li>
                 <li className="leading-loose">2. EC（電導率）單位以 mS/cm 來表示</li>
             </ul>
-            <Line data={chartData} options={options} />
+            <Skeleton isLoaded={chartData != null}>
+                {chartData && <Line data={chartData} options={options} />}
+            </Skeleton>
         </div>
     )
 }

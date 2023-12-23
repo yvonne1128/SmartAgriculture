@@ -1,6 +1,6 @@
 'use client';
 
-import { FertilizeAmountArray } from "@/app/page";
+import { FertilizeAmountArrayDataModel } from "@/app/page";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -12,6 +12,8 @@ import {
     Legend,
     ChartOptions
 } from 'chart.js';
+import { useEffect, useState } from "react";
+import fetchFertilizeData from "@/app/services/fetchFertilizeData";
 
 ChartJS.register(
     CategoryScale,
@@ -25,9 +27,26 @@ ChartJS.register(
 /**
  * 施肥建議
  */
-export default function FertilizeComponent({ fertilizeData }: { fertilizeData: FertilizeAmountArray }) {
-    const labels = fertilizeData.fertilizer_amount.map(item => item.organic_matter);
-    const values = fertilizeData.fertilizer_amount.map(item => item.fertilizer_amount);
+export default function FertilizeComponent() {
+    const [fertilize, setFertilize] = useState<FertilizeAmountArrayDataModel>();
+
+    useEffect(() => {
+        fetchFertilizeData()
+            .then(data => {
+                setFertilize(data);
+            })
+            .catch(error => {
+                console.error('Error fetching fertilize data:', error);
+            });
+    }, []);
+
+    const labels = fertilize
+        ? fertilize.fertilizer_amounts.map(item => item.organic_matter)
+        : [];
+    const values = fertilize
+        ? fertilize.fertilizer_amounts.map(item => item.fertilizer_amount)
+        : [];
+    
 
     const chartData = {
         labels: labels,
@@ -65,7 +84,7 @@ export default function FertilizeComponent({ fertilizeData }: { fertilizeData: F
 
     return (
         <div className="w-full flex flex-col px-4">
-            <h2 className="text-xl font-semibold">施肥建議</h2>
+            <h2 className="text-3xl font-semibold">施肥建議</h2>
 
             <br />
 

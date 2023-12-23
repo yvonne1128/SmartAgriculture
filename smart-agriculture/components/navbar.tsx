@@ -3,7 +3,7 @@
 import React from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/react";
 
-export default function CustomNavbar() {
+export default function CustomNavbar({ activeSection }: { activeSection: string }) {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const menuItems = [
@@ -27,29 +27,29 @@ export default function CustomNavbar() {
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem isActive>
-                    <Link color="foreground" href="#" aria-current="page">
-                        作物推薦
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#" >
-                        土壤分析
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        施肥建議
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
+                <NavbarItem isActive={activeSection === 'temperature'}>
+                    <Link color="foreground" href="#temperature">
                         溫度預測
                     </Link>
                 </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
+                <NavbarItem isActive={activeSection === 'rainfall'}>
+                    <Link color="foreground" href="#rainfall">
                         降雨量預測
+                    </Link>
+                </NavbarItem>
+                <NavbarItem isActive={activeSection === 'croprecommendations'}>
+                    <Link color="foreground" href="#croprecommendations" aria-current="page">
+                        作物推薦
+                    </Link>
+                </NavbarItem>
+                <NavbarItem isActive={activeSection === 'soil'}>
+                    <Link color="foreground" href="#soil" >
+                        土壤分析
+                    </Link>
+                </NavbarItem>
+                <NavbarItem isActive={activeSection === 'fertilize'}>
+                    <Link color="foreground" href="#fertilize">
+                        施肥建議
                     </Link>
                 </NavbarItem>
             </NavbarContent>
