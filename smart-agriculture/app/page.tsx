@@ -41,6 +41,8 @@ export interface RainfallDataModel {
   rain: TomorrowRainfall
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const [activeSection, setActiveSection] = useState('');
 
