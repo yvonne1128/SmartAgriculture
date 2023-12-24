@@ -12,8 +12,6 @@ import {
     Legend,
     ChartOptions
 } from 'chart.js';
-import { useEffect, useState } from "react";
-import fetchFertilizeData from "@/app/services/fetchFertilizeData";
 
 ChartJS.register(
     CategoryScale,
@@ -24,29 +22,19 @@ ChartJS.register(
     Legend
 );
 
-export const dynamic = 'force-dynamic';
-
 /**
  * 施肥建議
  */
-export default function FertilizeComponent() {
-    const [fertilize, setFertilize] = useState<FertilizeAmountArrayDataModel>();
-
-    useEffect(() => {
-        fetchFertilizeData()
-            .then(data => {
-                setFertilize(data);
-            })
-            .catch(error => {
-                console.error('Error fetching fertilize data:', error);
-            });
-    }, []);
-
-    const labels = fertilize
-        ? fertilize.fertilizer_amounts.map(item => item.organic_matter)
+export default function FertilizeComponent({
+    fertilizeData
+}: {
+    fertilizeData: FertilizeAmountArrayDataModel
+}) {
+    const labels = fertilizeData
+        ? fertilizeData.fertilizer_amounts.map(item => item.organic_matter)
         : [];
-    const values = fertilize
-        ? fertilize.fertilizer_amounts.map(item => item.fertilizer_amount)
+    const values = fertilizeData
+        ? fertilizeData.fertilizer_amounts.map(item => item.fertilizer_amount)
         : [];
     
 
@@ -85,8 +73,8 @@ export default function FertilizeComponent() {
     };
 
     return (
-        <div className="w-full flex flex-col px-4">
-            <h2 className="text-3xl font-semibold">施肥建議</h2>
+        <div className="w-full flex flex-col">
+            <h2 className="text-2xl lg:text-3xl font-semibold">施肥建議</h2>
 
             <br />
 

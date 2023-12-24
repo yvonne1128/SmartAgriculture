@@ -1,6 +1,4 @@
-'use client';
-
-import { SoilDataModel } from "@/app/page";
+import { TemperatureDataModel } from "@/app/page";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -23,22 +21,17 @@ ChartJS.register(
     Legend
 );
 
-export const dynamic = 'force-dynamic';
-
-/**
- * 土壤分析
- */
-export default function SoilComponent({
-    soilData
+export default function TemperatureComponent({
+    temperatureData
 }: {
-    soilData: SoilDataModel
+    temperatureData: TemperatureDataModel
 }) {
-    const chartData =  {
-        labels: Object.keys(soilData),
+    const chartData = {
+        labels: Object.values(temperatureData.temp).map(item => item.date),
         datasets: [
             {
-                label: 'mg/L',
-                data: Object.values(soilData).map(item => item.value),
+                label: '溫度',
+                data: Object.values(temperatureData.temp).map(item => item.predictedtemperature),
                 fill: false,
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
                 borderColor: 'rgba(53, 162, 235, 0.8)',
@@ -51,28 +44,23 @@ export default function SoilComponent({
             x: {
                 title: {
                     display: true,
-                    text: '元素名稱', // X 軸的標籤
+                    text: '日期', // X 軸的標籤
                 },
             },
             y: {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'mg / L', // Y 軸的標籤
+                    text: '°C', // Y 軸的標籤
                 },
             },
         },
         responsive: true,
     };
-    
+
     return (
-        <div className="w-full flex flex-col">
-            <h2 className="text-2xl lg:text-3xl font-semibold">土壤分析</h2>
-            <br />
-            <ul>
-                <li className="leading-loose">1. 當監測數值大於需要的量及無須補充</li>
-                <li className="leading-loose">2. EC（電導率）單位以 mS/cm 來表示</li>
-            </ul>
+        <div className="w-full">
+            <h2 className="text-2xl lg:text-3xl font-semibold">溫度預測</h2>
             <Line data={chartData} options={options} />
         </div>
     )

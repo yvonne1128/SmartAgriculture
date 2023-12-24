@@ -5,8 +5,13 @@ import FertilizeComponent from "@/components/fertilize";
 import CustomNavbar from "@/components/navbar"
 import RainfallComponent from "@/components/rainfall";
 import SoilComponent from "@/components/soil";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import fetchRainfallData from "./services/fetchRainfallData";
+import fetchCroprecommendationsData from "./services/fetchCroprecommendationsData";
+import fetchFertilizeData from "./services/fetchFertilizeData";
+import fetchSoilData from "./services/fetchSoilData";
+import fetchTemperatureData from "./services/fetchTemperature";
+import TemperatureComponent from "@/components/temperature";
 
 export interface SoilDataModel {
   organic_matter: { value: number; threshold: number; status: string };
@@ -42,10 +47,23 @@ export interface RainfallDataModel {
   rain: TomorrowRainfall
 }
 
+interface Temperatures {
+  date: string,
+  predictedtemperature: number
+}
+
+export interface TemperatureDataModel {
+  temp: Temperatures[]
+}
+
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
+export default function Home() {
   const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
+  const [soil, setSoil] = useState<SoilDataModel | null>(null);
+  const [croprecommendations, setCroprecommendations] = useState<CroprecommendationsArrayDataModel | null>(null);
+  const [fertilize, setFertilize] = useState<FertilizeAmountArrayDataModel | null>(null);
+  const [temperature, setTemperature] = useState<TemperatureDataModel | null>(null);
 
   useEffect(() => {
     fetchRainfallData()
@@ -55,28 +73,73 @@ export default async function Home() {
       .catch(error => {
         console.error('Error fetching rainfall data:', error);
       });
+    
+    fetchCroprecommendationsData()
+      .then(data => {
+        setCroprecommendations(data);
+      })
+      .catch(error => {
+        console.error('Error fetching croprecommendations data:', error);
+      });
+    
+    fetchFertilizeData()
+      .then(data => {
+        setFertilize(data);
+      })
+      .catch(error => {
+        console.error('Error fetching fertilize data:', error);
+      });
+    
+    fetchSoilData()
+      .then(data => {
+        setSoil(data);
+      })
+      .catch(error => {
+        console.error('Error fetching soil data:', error);
+      });
+    
+    fetchTemperatureData()
+      .then(data => {
+        setTemperature(data);
+      })
+      .catch(error => {
+        console.error('Error fetching temperature data:', error);
+      });
   }, []);
   
   return (
     <>
       <CustomNavbar/>
       
-      <main className="flex min-h-screen flex-col items-center justify-between px-16 py-6">
-        <div id="rainfall" className="w-full flex flex-row py-16">
-          {rainfall && <RainfallComponent rainfallData={rainfall} />}
+      <main className="flex min-h-screen flex-col items-center justify-between px-4 lg:px-16 py-6">
+        <div className="w-full grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6 lg:py-16">
+          {rainfall &&
+            <div id="rainfall" className="col-span-1 py-4">
+              <RainfallComponent rainfallData={rainfall} />
+            </div>
+          }
+          {temperature &&
+            <div id="temperature" className="col-span-1 py-4 lg:col-span-2">
+              <TemperatureComponent temperatureData={temperature} />
+            </div>
+          }
         </div>
 
-        <div id="croprecommendations" className="w-full">
-          <CroprecommendationsComponent />
+        <div id="croprecommendations" className="w-full grid grid-cols-1 gap-4">
+          {croprecommendations &&
+            <div className="col-span-1 py-4">
+              <CroprecommendationsComponent croprecommendationsData={croprecommendations} />
+            </div>
+          }
         </div>
 
-        <div className="w-full flex flex-row py-16">
-          <div id="soil" className="w-full flex flex-col px-4">
-            <SoilComponent />
+        <div className="w-full grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6 lg:py-16">
+          <div id="soil" className="w-full col-span-1 py-4">
+            {soil && <SoilComponent soilData={soil} />}
           </div>
           
-          <div id="fertilize" className="w-full flex flex-col px-4">
-            <FertilizeComponent />
+          <div id="fertilize" className="w-full col-span-1 py-4">
+            {fertilize && <FertilizeComponent fertilizeData={fertilize} />}
           </div>
         </div>
       </main>

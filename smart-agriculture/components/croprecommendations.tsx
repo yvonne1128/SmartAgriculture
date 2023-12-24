@@ -11,9 +11,6 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import { useEffect, useState } from "react";
-import fetchCroprecommendationsData from "@/app/services/fetchCroprecommendationsData";
-import { Skeleton } from "@nextui-org/react";
 
 ChartJS.register(
     CategoryScale,
@@ -29,21 +26,13 @@ export const dynamic = 'force-dynamic';
 /**
  * 施肥建議
  */
-export default function CroprecommendationsComponent() {
-    const [croprecommendations, setCroprecommendations] = useState<CroprecommendationsArrayDataModel>();
-
-    useEffect(() => {
-        fetchCroprecommendationsData()
-            .then(data => {
-                setCroprecommendations(data);
-            })
-            .catch(error => {
-                console.error('Error fetching croprecommendations data:', error);
-            });
-    }, []);
-
-    const labels = croprecommendations ? croprecommendations.best_selling.map(item => item.no) : [];
-    const values = croprecommendations ? croprecommendations.best_selling.map(item => item.TotalAmount) : [];
+export default function CroprecommendationsComponent({
+    croprecommendationsData
+}: {
+        croprecommendationsData: CroprecommendationsArrayDataModel
+}) {
+    const labels = croprecommendationsData ? croprecommendationsData.best_selling.map(item => item.no) : [];
+    const values = croprecommendationsData ? croprecommendationsData.best_selling.map(item => item.TotalAmount) : [];
 
     const labelNames = [
         { no: 1, name: "草莓" },
@@ -107,8 +96,8 @@ export default function CroprecommendationsComponent() {
     };
 
     return (
-        <div className="w-full flex flex-col px-4">
-            <h1 className="text-3xl font-semibold">作物推薦</h1>
+        <div className="w-full flex flex-col">
+            <h1 className="text-2xl lg:text-3xl font-semibold">作物推薦</h1>
 
             <br />
 
@@ -117,9 +106,7 @@ export default function CroprecommendationsComponent() {
                 <li className="leading-loose">2. 資料地點：台北地區</li>
             </ul>
 
-            <Skeleton isLoaded={croprecommendations != undefined}>
-                <Bar data={chartData} options={options} />
-            </Skeleton>
+            <Bar data={chartData} options={options} />
         </div>
     )
 }

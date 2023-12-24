@@ -4,7 +4,8 @@ export async function GET() {
         'http://120.110.115.130:5000/rainfall',
         {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache'
             }
         }
     );

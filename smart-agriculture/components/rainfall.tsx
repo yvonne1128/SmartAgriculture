@@ -1,9 +1,9 @@
 'use client';
 
 import { RainfallDataModel } from "@/app/page";
-import fetchRainfallData from "@/app/services/fetchRainfallData";
-import { Card, CardBody, CardHeader, CircularProgress, Skeleton } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { Card, CardBody, CardHeader, CircularProgress } from "@nextui-org/react";
+import rainfallAnimation from "@/public/rainfall.json"
+import Lottie from "lottie-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -11,18 +11,6 @@ export const dynamic = 'force-dynamic';
  * 土壤分析
  */
 export default function RainfallComponent({ rainfallData }: { rainfallData: RainfallDataModel }) {
-    // const [rainfall, setRainfall] = useState<RainfallDataModel | null>(null);
-
-    // useEffect(() => {
-    //     fetchRainfallData()
-    //         .then(data => {
-    //             setRainfall(data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching rainfall data:', error);
-    //         });
-    // }, []);
-
     function getTomorrowDate() {
         // 獲取當前日期
         const today = new Date();
@@ -40,9 +28,9 @@ export default function RainfallComponent({ rainfallData }: { rainfallData: Rain
     }
 
     return (
-        <Card className="m-4 p-4">
+        <Card className="w-full p-4 lg:w-fit">
             <CardHeader>
-                <h2 className="text-2xl font-semibold">降雨預測</h2>
+                <h2 className="text-2xl lg:text-3xl font-semibold">降雨預測</h2>
             </CardHeader>
             <CardBody>
                 <ul>
@@ -52,6 +40,9 @@ export default function RainfallComponent({ rainfallData }: { rainfallData: Rain
                         : <CircularProgress aria-label="Loading..." />
                     }</li>
                 </ul>
+                <Lottie
+                    animationData={rainfallAnimation}
+                />
             </CardBody>
         </Card>
     )
