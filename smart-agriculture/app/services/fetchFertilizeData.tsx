@@ -1,3 +1,5 @@
+"use client";
+
 import { FertilizeAmountArrayDataModel } from "../page";
 
 export default async function fetchFertilizeData() {

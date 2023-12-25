@@ -1,3 +1,5 @@
+"use client";
+
 import { SoilDataModel } from "../page";
 
 export default async function fetchSoilData() {

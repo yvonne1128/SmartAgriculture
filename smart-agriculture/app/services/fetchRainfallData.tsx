@@ -1,3 +1,5 @@
+"use client";
+
 import { RainfallDataModel } from "../page";
 
 export default async function fetchRainfallData() {

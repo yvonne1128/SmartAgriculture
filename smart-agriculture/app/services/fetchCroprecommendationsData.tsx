@@ -1,3 +1,5 @@
+"use client";
+
 import { CroprecommendationsArrayDataModel } from "../page";
 
 export default async function fetchCroprecommendationsData() {

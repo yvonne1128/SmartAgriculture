@@ -1,3 +1,5 @@
+"use client";
+
 import { TemperatureDataModel } from "../page";
 
 export default async function fetchTemperatureData() {
