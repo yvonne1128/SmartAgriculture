@@ -8,7 +8,7 @@ module.exports = {
         return [
             {
                 source: "/api/:path*",
-                destination: "http://120.110.115.130:5000/:path*",
+                destination: "http://awedvhu.com:5000//:path*",
             },
         ];
     },

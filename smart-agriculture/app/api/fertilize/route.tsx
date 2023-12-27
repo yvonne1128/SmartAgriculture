@@ -1,7 +1,7 @@
 export async function GET() {
 
     const apiResponse = await fetch(
-        'http://120.110.115.130:5000/fertilize',
+        'http://awedvhu.com:5000/fertilize',
         {
             headers: {
                 'Content-Type': 'application/json',
